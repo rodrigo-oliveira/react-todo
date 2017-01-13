@@ -8,31 +8,48 @@ class TodoApp extends React.Component {
 		super(props);
 		this.state = {
 			todos: [
-				{ id: 0, isDone: true,  text: 'make components' },
-				{ id: 1, isDone: false, text: 'design actions' },
-				{ id: 2, isDone: false, text: 'implement reducer' },
-				{ id: 3, isDone: false, text: 'connect components' }
+				{ id: 0, isDone: true,  text: 'Item 1' },
+				{ id: 1, isDone: false, text: 'Item 2' },
+				{ id: 2, isDone: false, text: 'Item 3' }
 			]
 		};
-		this.updateItems = this.updateItems.bind(this);
+		this.addItem = this.addItem.bind(this);
+		this.removeItem = this.removeItem.bind(this);
 	}
 
-	updateItems(item) {
+	updateItems(items) {
+		console.log(items);
+		this.setState({
+			todos: items
+		});
+	}
+
+	addItem(item) {
 		const todos = this.state.todos;
 
-		todos.push({id:todos.length+1, isDone: false, text: item});
+		todos.push({
+			id: todos.length+1,
+			isDone: false,
+			text: item
+		});
 
-		this.setState({
-			todos: todos
-		})
+		this.updateItems(todos);
+	}
+
+	removeItem(item) {
+		const todos = this.state.todos;
+		const todo = this.state.todos.filter((todo) => todo.id !== item.id);
+
+		this.updateItems(todo);
+
 	}
 
   render() {
 		return (
 			<main className='todo'>
 				<TodoHeader />
-				<TodoForm onFormSubmit={this.updateItems} />	 
-				<TodoList todos={this.state.todos} />
+				<TodoForm onFormSubmit={this.addItem} />	 
+				<TodoList todos={this.state.todos} onRemove={this.removeItem} />
 			</main>
 		);
   }
